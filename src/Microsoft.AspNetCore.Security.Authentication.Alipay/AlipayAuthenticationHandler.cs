@@ -61,7 +61,9 @@ namespace Microsoft.AspNetCore.Security.Authentication.Alipay
             }
             else
             {
-                var payload = JObject.FromObject(userinfoShareResponse);
+                string json = System.Text.Json.JsonSerializer.Serialize(userinfoShareResponse, userinfoShareResponse.GetType());
+                var payload = System.Text.Json.JsonDocument.Parse(json).RootElement;
+               // var payload = JObject.FromObject(userinfoShareResponse);
                 var principal = new ClaimsPrincipal(identity);
                 var context = new OAuthCreatingTicketContext(principal, properties, Context, Scheme, Options, Backchannel, tokens, payload);
                 context.RunClaimActions(payload);
@@ -76,7 +78,7 @@ namespace Microsoft.AspNetCore.Security.Authentication.Alipay
         /// <param name="code"></param>
         /// <param name="redirectUri"></param>
         /// <returns></returns>
-        protected override async Task<OAuthTokenResponse> ExchangeCodeAsync([NotNull] string code, [NotNull] string redirectUri)
+        protected async Task<OAuthTokenResponse> ExchangeCodeAsync([NotNull] string code, [NotNull] string redirectUri)
         {
             try
             {
@@ -99,7 +101,9 @@ namespace Microsoft.AspNetCore.Security.Authentication.Alipay
                 }
                 else
                 {
-                    var payload = JObject.FromObject(alipayResponse);
+                    string json = System.Text.Json.JsonSerializer.Serialize(alipayResponse, alipayResponse.GetType());
+
+                    var payload = System.Text.Json.JsonDocument.Parse(json);// JObject.FromObject(alipayResponse);
                     return OAuthTokenResponse.Success(payload);
                 }
             }
@@ -108,6 +112,10 @@ namespace Microsoft.AspNetCore.Security.Authentication.Alipay
                 Logger.LogError(ex.ToString());
                 return OAuthTokenResponse.Failed(new Exception("An error occurred while retrieving an access token."));
             }
+        }
+
+        protected override System.Threading.Tasks.Task<Microsoft.AspNetCore.Authentication.OAuth.OAuthTokenResponse> ExchangeCodeAsync(Microsoft.AspNetCore.Authentication.OAuth.OAuthCodeExchangeContext context) {
+            return ExchangeCodeAsync(context.Code, context.RedirectUri);
         }
 
         /// <summary>

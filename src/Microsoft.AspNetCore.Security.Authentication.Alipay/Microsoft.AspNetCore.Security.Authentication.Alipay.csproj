@@ -1,9 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <Import Project="..\..\build\packages.props" />
+  <!--<Import Project="..\..\build\packages.props" />-->
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -25,12 +25,12 @@
     <PackageTags>aspnetcore;authentication;oauth;security;alipay</PackageTags>
     <!--发行说明-->
     <PackageReleaseNotes>更新引用包版本</PackageReleaseNotes>
+    <OutputType>Library</OutputType>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" Version="2020.1.0" PrivateAssets="All" />
     <PackageReference Include="LeXun.Aliyun.AopSdk.Core" Version="2.3.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.OAuth" Version="$(AspNetCoreVersion)" />
   </ItemGroup>
 
 </Project>
